@@ -1,155 +1,153 @@
-<html>
-
+<!doctype html>
+<html lang="es">
 <head>
-    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <meta charset="utf-8" />
+  <title>Parc Ambiental del Bages en VR</title>
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <style> body { margin: 0; } </style>
 </head>
-
 <body>
-    <a-scene cursor="rayOrigin: mouse">
-        <a-assets>
-            <!-- Imatges 360 -->
-            <img id="ipresentacio" src="assets/imatges/imatge0.jpg">
-            <img id="i00" src="assets/imatges/Pati.jpg">
-            <img id="i01" src="assets/imatges/torreSuperior.jpg">
-            <img id="i02" src="assets/imatges/ermitaAltar.jpg">
+  <a-scene cursor="rayOrigin: mouse">
+    <a-assets>
+      <!-- Panorama / imágenes (usa las que aparecen en tu captura) -->
+      <!-- Ajusta los nombres si en tu sistema tienen el sufijo _1 o espacios -->
+      <img id="scene-general" src="assets/imatges/0_1general.jpg">
+      <img id="scene-oficines" src="assets/imatges/1_oficines.jpg">
+      <img id="scene-abocador" src="assets/imatges/2_abocador.jpg">
+      <img id="scene-plantatransferencia" src="assets/imatges/3_plantatransferencia.jpg">
+      <img id="scene-motorbiogas" src="assets/imatges/4_motorbiogas.jpg">
+      <img id="scene-bassesdaigues" src="assets/imatges/5_bassesdaigues.jpg">
+      <img id="scene-parcsolar" src="assets/imatges/6_parcsolar.jpg">
+      <img id="scene-plantacompostatge" src="assets/imatges/7_plantacompostatge.jpg">
+      <img id="scene-novaplanta" src="assets/imatges/8_novaplanta.jpg">
 
-            <!--imatge del plano-->
-            <img id="dibuplano" src="assets/imatges/plano.jpg">
+      <!-- plano y banderas (igual que antes, dejadas tal cual) -->
+      <img id="dibuplano" src="assets/imatges/plano.jpg">
+      <img id="bes" src="assets/imatges/bes.png">
+      <img id="bcat" src="assets/imatges/bcat.png">
+      <img id="buk" src="assets/imatges/buk.png">
+    </a-assets>
 
-            <!--imatges de banderes-->
-            <img id="bes" src="assets/imatges/bes.png">
-            <img id="bcat" src="assets/imatges/bcat.png">
-            <img id="buk" src="assets/imatges/buk.png">
+    <!-- cámara -->
+    <a-entity camera look-controls wasd-controls="false"></a-entity>
 
-        </a-assets>
+    <!-- sky inicial (pantalla de presentación) -->
+    <a-sky id="sky" src="#scene-general"></a-sky>
 
-        <a-entity camera look-controls wasd-controls="false"></a-entity>
+    <!-- banderas para seleccionar idioma -->
+    <a-plane id="es" position="-1.6 -0.6 -2" src="#bes" rotation="0 0 0" scale="1 1 1" class="langButton"></a-plane>
+    <a-plane id="cat" position="0 -0.6 -2" src="#bcat" rotation="0 0 0" scale="1 1 1" class="langButton"></a-plane>
+    <a-plane id="uk" position="1.6 -0.6 -2" src="#buk" rotation="0 0 0" scale="1 1 1" class="langButton"></a-plane>
 
-        <!-- Entorn 360 inicial -->
-        <a-sky id="sky" src="#ipresentacio"></a-sky>
-        <!-- Mostra les tres banderes -->
-        <a-plane id="es" position="-1.5 -0.5 -2" src="#bes" rotation="0 0 0" scale="1 1 1" botocastella></a-plane>
-        <a-plane id="cat" position="0 -0.5 -2" src="#bcat" rotation="0 0 0" scale="1 1 1" botocatala></a-plane>
-        <a-plane id="uk" position="1.5 -0.5 -2" src="#buk" rotation="0 0 0" scale="1 1 1" botoangles></a-plane>
+    <!-- plano (visibilidad controlada por JS) -->
+    <a-plane id="plano" position="0 -1 -2" src="#dibuplano" rotation="0 0 0" scale="2 1 2" visible="false"></a-plane>
 
-        <!-- Deixa el mapa a punt per mostrar a la propera-->
-        <a-plane id="plano" position="0 -1 -2" src="#dibuplano" rotation="0 0 0" scale="2 1 2"
-            visible="false"></a-plane>
+    <!-- entidad de sonido; no predefinimos la src porque la cargamos dinámicamente -->
+    <a-entity id="sound" sound="autoplay: false"></a-entity>
 
-        <!-- Punts d'interés a punt de mostrar-->
+  </a-scene>
 
-        <a-sphere id="esfera1" bototorre="" position="-0.7 -0.7 -2" radius="0.03" color="blue" visible="false"
-            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
-        <a-sphere id="esfera2" botoermita="" position="0.224 -1.2 -1.793" radius="0.03" color="blue" visible="false"
-            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
+  <script>
+    // Elementos DOM
+    const sky = document.querySelector('#sky');
+    const sound = document.querySelector('#sound');
+    const banderaEs = document.querySelector('#es');
+    const banderaCat = document.querySelector('#cat');
+    const banderaUk = document.querySelector('#uk');
+    const mapa = document.querySelector('#plano');
 
+    // Idioma por defecto
+    let idioma = "ca"; // ca / es / uk
 
-        <!-- Element de so -->
-        <a-entity id="sound" sound="src: #audio5"></a-entity>
-    </a-scene>
+    // Mapa lógico de escenas -> imágenes (ids de a-assets)
+    const scenes = {
+      general: '#scene-general',
+      oficines: '#scene-oficines',
+      abocador: '#scene-abocador',
+      plantatransferencia: '#scene-plantatransferencia',
+      motorbiogas: '#scene-motorbiogas',
+      bassesdaigues: '#scene-bassesdaigues',
+      parcsolar: '#scene-parcsolar',
+      planta_compostatge: '#scene-plantacompostatge',
+      nova_planta: '#scene-novaplanta'
+    };
 
+    // Mapa lógico escena -> nombre base de audio (archivo sin carpeta ni extensión)
+    // Ajusta estos valores si tus audios tienen nombres distintos.
+    const audioMap = {
+      general: 'cetreria',                 // ejemplo: assets/audios/ca/cetreria.mp3
+      oficines: 'oficina',                // assets/audios/ca/oficina.mp3
+      abocador: 'vertedero',              // assets/audios/ca/vertedero.mp3
+      plantatransferencia: 'vidre_i_envasos', // assets/audios/ca/vidre_i_envasos.mp3
+      motorbiogas: 'biogas',
+      bassesdaigues: 'aigues_pluvials',
+      parcsolar: 'parc_solar',
+      planta_compostatge: 'planta_compostatge',
+      nova_planta: 'planta_valoritzacio'  // adapta tilde/ç si hace falta en tu FS
+    };
 
-    <script>
-        const sky = document.querySelector('#sky');
-        const sound = document.querySelector('#sound');
-        let idioma = "ca"
-        const banderaEs = document.querySelector('#es');
-        const banderaCat = document.querySelector('#cat');
-        const banderaUk = document.querySelector('#uk');
-        const esfera1 = document.querySelector('#esfera1');
-        const esfera2 = document.querySelector('#esfera2');
-        const mapa = document.querySelector('#plano');
+    // función genérica para cambiar escena y (opcionalmente) reproducir audio asociado
+    function setScene(key, playAudioToo = true) {
+      if (!scenes[key]) {
+        console.warn('Escena no encontrada:', key);
+        return;
+      }
+      // cambiar sky
+      sky.setAttribute('src', scenes[key]);
 
-        //elimina el moviment de les tecles del cursor
-        document.querySelector("[camera]").removeAttribute("wasd-controls");
+      // stop previo
+      if (sound.components && sound.components.sound && sound.components.sound.isPlaying) {
+        sound.components.sound.stopSound();
+      }
 
-        //funció per sonar audio, va a buscar la carpeta de l'idioma
-        function playAudio(nomFitxer) {
-            const ruta = `assets/audios/${idioma}/${nomFitxer}.mp3`;
-            console.log(ruta);
-            if (sound.components.sound && sound.components.sound.isPlaying) {
-                sound.components.sound.stopSound();
-            }
-            sound.setAttribute('sound', `src: ${ruta}`);
-            sound.components.sound.playSound();
-        }
+      // si hay audio asociado y el flag lo permite, reproducir
+      const audioNombre = audioMap[key];
+      if (playAudioToo && audioNombre) {
+        // ruta completa a archivo mp3 (idioma variable)
+        // Nota: los audios deben estar en assets/audios/<idioma>/<audioNombre>.mp3
+        const ruta = `assets/audios/${idioma}/${audioNombre}.mp3`;
+        // establecemos el atributo sound a la ruta (A-Frame acepta URL directa)
+        sound.setAttribute('sound', `src: ${ruta}; autoplay: false`);
+        // A-Frame necesita que el componente sound esté cargado antes de reproducir:
+        // esperamos un tick para que el componente se inicialice
+        setTimeout(() => {
+          try {
+            if (sound.components.sound) sound.components.sound.playSound();
+          } catch (err) {
+            console.error('No se ha podido reproducir el audio:', err);
+          }
+        }, 100);
+      }
+    }
 
+    // Helpers para los botones de idioma (se mantiene lógica anterior)
+    function onSelectLanguage(lang) {
+      idioma = lang;
+      // al seleccionar idioma mostramos la escena "general" y ocultamos banderas
+      setScene('general', true);
+      banderaEs.setAttribute('visible', false);
+      banderaCat.setAttribute('visible', false);
+      banderaUk.setAttribute('visible', false);
+      mapa.setAttribute('visible', true);
+    }
 
-        //si prem boto angles, carrega la imatge 00
-        //deixa de mostrar les banderes, mostra el mapa
-        //mostra els punts d'interes i sona la locució inicial en l'idioma que toca
-        AFRAME.registerComponent("botoangles", {
-            init: function () {
-                this.el.addEventListener("click", (e) => {
-                    sky.setAttribute('src', '#i00'); //Mostra la imatge 0  
-                    banderaEs.setAttribute('visible', false);
-                    banderaCat.setAttribute('visible', false);
-                    banderaUk.setAttribute('visible', false);
-                    esfera1.setAttribute('visible', true);
-                    esfera2.setAttribute('visible', true);
-                    mapa.setAttribute('visible', true);
-                    idioma = "uk"
-                    playAudio("Intro");  
-                })
-            }
-        });
+    // Registra clicks
+    banderaEs.addEventListener('click', () => onSelectLanguage('es'));
+    banderaCat.addEventListener('click', () => onSelectLanguage('ca'));
+    banderaUk.addEventListener('click', () => onSelectLanguage('uk'));
 
-        AFRAME.registerComponent("botocatala", {
-            init: function () {
-                this.el.addEventListener("click", (e) => {
-                    sky.setAttribute('src', '#i00'); //Mostra la imatge 0  
-                    banderaEs.setAttribute('visible', false);
-                    banderaCat.setAttribute('visible', false);
-                    banderaUk.setAttribute('visible', false);
-                    esfera1.setAttribute('visible', true);
-                    esfera2.setAttribute('visible', true);
-                    mapa.setAttribute('visible', true);
-                    idioma = "cat"
-                    playAudio("Intro");  
-                })
-            }
-        });
+    // --- Opcional: ejemplo para cambiar escena desde mapa (si quieres) ---
+    // Puedes añadir planos invisibles sobre el mapa con id's y eventos click que llamen:
+    // setScene('oficines');
+    // setScene('abocador');
+    // etc.
 
-        AFRAME.registerComponent("botocastella", {
-            init: function () {
-                this.el.addEventListener("click", (e) => {
-                    sky.setAttribute('src', '#i00'); //Mostra la imatge 0  
-                    banderaEs.setAttribute('visible', false);
-                    banderaCat.setAttribute('visible', false);
-                    banderaUk.setAttribute('visible', false);
-                    esfera1.setAttribute('visible', true);
-                    esfera2.setAttribute('visible', true);
-                    mapa.setAttribute('visible', true);
-                    idioma = "es"
-                    playAudio("Intro");  
-                })
-            }
-        });
+    // Inicial: muestra la general (sin reproducir) — o quítalo si prefieres pantalla en negro
+    sky.setAttribute('src', scenes.general);
 
-        AFRAME.registerComponent("bototorre", {
-            init: function () {
-                this.el.addEventListener("click", (e) => {
-                    sky.setAttribute('src', '#i01'); //Mostra la imatge de la torre                
-                    if (sound.components.sound.isPlaying) {
-                        sound.components.sound.stopSound(); // Para el so si ja s'està reproduint
-                    }
-                    playAudio("torre");
-                })
-            }
-        });
-        AFRAME.registerComponent("botoermita", {
-            init: function () {
-                this.el.addEventListener("click", (e) => {
-                    sky.setAttribute('src', '#i02'); //Mostra la imatge de la torre                
-                    if (sound.components.sound.isPlaying) {
-                        sound.components.sound.stopSound(); // Para el so si ja s'està reproduint
-                    }
-                    playAudio("ermita");
-                })
-            }
-        });
-
-    </script>
+    // Elimina el movimiento con WASD como tenías antes (por seguridad)
+    const cam = document.querySelector('[camera]');
+    if (cam) cam.removeAttribute('wasd-controls');
+  </script>
 </body>
-
 </html>
