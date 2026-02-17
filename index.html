@@ -1,157 +1,289 @@
-<!doctype html>
-<html lang="es">
+<html>
+
 <head>
-  <meta charset="utf-8" />
-  <title>Visita VR</title>
-  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-  <style>
-    body { margin: 0; }
-  </style>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
 </head>
+
 <body>
+    <a-scene cursor="rayOrigin: mouse">
+        <a-assets>
+            <!-- Imatges 360 -->
+            <img id="ipresentacio" src="assets/imatges/0_1general.jpg">
+            <img id="i00" src="assets/imatges/Pati.jpg">
+            <img id="i01" src="assets/imatges/1_1oficines.jpg">
+            <img id="i02" src="assets/imatges/2_abocador.jpg">
+            <img id="i03" src="assets/imatges/3_plantatransferencia.jpg">
+            <img id="i04" src="assets/imatges/4_motorbiogas.jpg">
+            <img id="i05" src="assets/imatges/5_bassesdaigues.jpg">
+            <img id="i06" src="assets/imatges/6_parcsolar.jpg">
+            <img id="i07" src="assets/imatges/7_1plantacompostatge.jpg">
+            <img id="i08" src="assets/imatges/8_1novaplanta.jpg">
+            <img id="i09" src="assets/imatges/9_falconeria.jpg">
 
-<a-scene cursor="rayOrigin: mouse">
-  <a-assets>
+            <!--imatge del plano-->
+            <img id="dibuplano" src="assets/imatges/plano.jpg">
 
-    <!-- Escenas -->
-    <img id="scene-general" src="assets/imatges/0_general.jpg">
-    <img id="scene-oficines" src="assets/imatges/1_oficines.jpg">
-    <img id="scene-abocador" src="assets/imatges/2_abocador.jpg">
-    <img id="scene-plantatransferencia" src="assets/imatges/3_plantatransferencia.jpg">
-    <img id="scene-motorbiogas" src="assets/imatges/4_motorbiogas.jpg">
-    <img id="scene-bassesdaigues" src="assets/imatges/5_bassesdaigues.jpg">
-    <img id="scene-parcsolar" src="assets/imatges/6_parcsolar.jpg">
-    <img id="scene-plantacompostatge" src="assets/imatges/7_plantacompostatge.jpg">
-    <img id="scene-novaplanta" src="assets/imatges/8_novaplanta.jpg">
+            <!--imatges de banderes-->
+            <img id="bes" src="assets/imatges/bes.png">
+            <img id="bcat" src="assets/imatges/bcat.png">
+            <img id="buk" src="assets/imatges/buk.png">
 
-    <!-- plano y banderas -->
-    <img id="dibuplano" src="assets/imatges/plano.jpg">
-    <img id="bes" src="assets/imatges/bes.png">
-    <img id="bcat" src="assets/imatges/bcat.png">
-    <img id="buk" src="assets/imatges/buk.png">
+        </a-assets>
 
-  </a-assets>
+        <a-entity camera look-controls wasd-controls="false"></a-entity>
 
-  <!-- cámara -->
-  <a-entity camera look-controls wasd-controls="false"></a-entity>
+        <!-- Entorn 360 inicial -->
+        <a-sky id="sky" src="#ipresentacio"></a-sky>
+        <!-- Mostra les tres banderes -->
+        <a-plane id="es" position="-1.5 -0.5 -2" src="#bes" rotation="0 0 0" scale="1 1 1" botocastella></a-plane>
+        <a-plane id="cat" position="0 -0.5 -2" src="#bcat" rotation="0 0 0" scale="1 1 1" botocatala></a-plane>
+        <a-plane id="uk" position="1.5 -0.5 -2" src="#buk" rotation="0 0 0" scale="1 1 1" botoangles></a-plane>
 
-  <!-- sky inicial -->
-  <a-sky id="sky" src="#scene-general"></a-sky>
+        <!-- Deixa el mapa a punt per mostrar a la propera-->
+        <a-plane id="plano" position="0 -1 -2" src="#dibuplano" rotation="0 0 0" scale="2 1 2"
+            visible="false"></a-plane>
 
-  <!-- banderas idioma -->
-  <a-plane id="es" position="-1.6 -0.6 -2" src="#bes" scale="1 1 1"></a-plane>
-  <a-plane id="cat" position="0 -0.6 -2" src="#bcat" scale="1 1 1"></a-plane>
-  <a-plane id="uk" position="1.6 -0.6 -2" src="#buk" scale="1 1 1"></a-plane>
+        <!-- Punts d'interés a punt de mostrar-->
 
-  <!-- mapa -->
-  <a-plane id="plano"
-           position="0 -1 -2"
-           src="#dibuplano"
-           scale="2 1 2"
-           visible="false">
-  </a-plane>
+        <a-sphere id="esfera1" botooficines="" position="0.086 -0.66 -2" radius="0.03" color="blue" visible="false"
+            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
 
-  <!-- esfera general -->
-  <a-sphere id="hot-general"
-            position="0 0 0"
-            radius="0.08"
-            color="blue"
-            visible="false"
-            animation="property: scale; dur: 1000; to: 1.2 1.2 1.2; dir: alternate; loop: true">
-  </a-sphere>
+        <a-sphere id="esfera2" botoabocador="" position="-0.50 -0.79 -2" radius="0.03" color="blue" visible="false"
+            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
 
-  <!-- sonido -->
-  <a-entity id="sound" sound="autoplay: false"></a-entity>
+        <a-sphere id="esfera3" bototransferencia="" position="-0.70 -0.85 -2" radius="0.03" color="blue" visible="false"
+            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
 
-</a-scene>
+        <a-sphere id="esfera4" botobiogas="" position="-0.74 -0.78 -2" radius="0.03" color="blue" visible="false"
+            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
 
-<script>
-  const sky = document.querySelector('#sky');
-  const sound = document.querySelector('#sound');
+        <a-sphere id="esfera5" botoaigua="" position="-0.67 -0.96 -2" radius="0.03" color="blue" visible="false"
+            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
 
-  const banderaEs = document.querySelector('#es');
-  const banderaCat = document.querySelector('#cat');
-  const banderaUk = document.querySelector('#uk');
+        <a-sphere id="esfera6" botosolar="" position="-0.51 -1.11 -2" radius="0.03" color="blue" visible="false"
+            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
 
-  const mapa = document.querySelector('#plano');
-  const hotGeneral = document.querySelector('#hot-general');
+        <a-sphere id="esfera7" botocompostatge="" position="0.130 -1.30 -2" radius="0.03" color="blue" visible="false"
+            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
+            
+        <a-sphere id="esfera8" botoplanta="" position="0.440 -1.10 -2" radius="0.03" color="blue" visible="false"
+            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
 
-  let idioma = "ca";
+        <a-sphere id="esfera9" botofalconeria="" position="0.180 -0.70 -2" radius="0.03" color="blue" visible="false"
+            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
+         
 
-  // escenas
-  const scenes = {
-    general: '#scene-general',
-    oficines: '#scene-oficines',
-    abocador: '#scene-abocador',
-    plantatransferencia: '#scene-plantatransferencia',
-    motorbiogas: '#scene-motorbiogas',
-    bassesdaigues: '#scene-bassesdaigues',
-    parcsolar: '#scene-parcsolar',
-    planta_compostatge: '#scene-plantacompostatge',
-    nova_planta: '#scene-novaplanta'
-  };
+        <!-- Element de so -->
+        <a-entity id="sound" sound="src: #audio5"></a-entity>
+    </a-scene>
 
-  // audios asociados
-  const audioMap = {
-    general: 'cetreria',
-    oficines: 'oficina',
-    abocador: 'vertedero',
-    plantatransferencia: 'vidre_i_envasos',
-    motorbiogas: 'biogas',
-    bassesdaigues: 'aigues_pluvials',
-    parcsolar: 'parc_solar',
-    planta_compostatge: 'planta_compostatge',
-    nova_planta: 'planta_valoritzacio'
-  };
 
-  function setScene(key, playAudioToo = true) {
-    if (!scenes[key]) return;
+    <script>
+        const sky = document.querySelector('#sky');
+        const sound = document.querySelector('#sound');
+        let idioma = "ca"
+        const banderaEs = document.querySelector('#es');
+        const banderaCat = document.querySelector('#cat');
+        const banderaUk = document.querySelector('#uk');
+        const esfera1 = document.querySelector('#esfera1');
+        const esfera2 = document.querySelector('#esfera2');
+        const esfera3 = document.querySelector('#esfera3');
+        const esfera4 = document.querySelector('#esfera4');
+        const esfera5 = document.querySelector('#esfera5');
+        const esfera6 = document.querySelector('#esfera6');
+        const esfera7 = document.querySelector('#esfera7');
+        const esfera8 = document.querySelector('#esfera8');
+        const esfera9 = document.querySelector('#esfera9');
+        const mapa = document.querySelector('#plano');
 
-    sky.setAttribute('src', scenes[key]);
+        //elimina el moviment de les tecles del cursor
+        document.querySelector("[camera]").removeAttribute("wasd-controls");
 
-    if (sound.components && sound.components.sound && sound.components.sound.isPlaying) {
-      sound.components.sound.stopSound();
-    }
-
-    const audioNombre = audioMap[key];
-    if (playAudioToo && audioNombre) {
-      const ruta = `assets/audios/${idioma}/${audioNombre}.mp3`;
-      sound.setAttribute('sound', `src: ${ruta}; autoplay: false`);
-
-      setTimeout(() => {
-        if (sound.components.sound) {
-          sound.components.sound.playSound();
+        //funció per sonar audio, va a buscar la carpeta de l'idioma
+        function playAudio(nomFitxer) {
+            const ruta = `assets/audios/${idioma}/${nomFitxer}.mp3`;
+            console.log(ruta);
+            if (sound.components.sound && sound.components.sound.isPlaying) {
+                sound.components.sound.stopSound();
+            }
+            sound.setAttribute('sound', `src: ${ruta}`);
+            sound.components.sound.playSound();
         }
-      }, 100);
-    }
-  }
 
-  function onSelectLanguage(lang) {
-    idioma = lang;
-    setScene('general', true);
 
-    banderaEs.setAttribute('visible', false);
-    banderaCat.setAttribute('visible', false);
-    banderaUk.setAttribute('visible', false);
+        //si prem boto angles, carrega la imatge 00
+        //deixa de mostrar les banderes, mostra el mapa
+        //mostra els punts d'interes i sona la locució inicial en l'idioma que toca
+        AFRAME.registerComponent("botoangles", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i00'); //Mostra la imatge 0  
+                    banderaEs.setAttribute('visible', false);
+                    banderaCat.setAttribute('visible', false);
+                    banderaUk.setAttribute('visible', false);
+                    esfera1.setAttribute('visible', true);
+                    esfera2.setAttribute('visible', true);
+                    esfera3.setAttribute('visible', true);
+                    esfera4.setAttribute('visible', true);
+                    esfera5.setAttribute('visible', true);
+                    esfera6.setAttribute('visible', true);
+                    esfera7.setAttribute('visible', true);
+                    esfera8.setAttribute('visible', true);
+                    esfera9.setAttribute('visible', true);
+                    mapa.setAttribute('visible', true);
+                    idioma = "uk"
+                    playAudio("Intro");  
+                })
+            }
+        });
 
-    mapa.setAttribute('visible', true);
-    hotGeneral.setAttribute('visible', true);
-  }
+        AFRAME.registerComponent("botocatala", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i00'); //Mostra la imatge 0  
+                    banderaEs.setAttribute('visible', false);
+                    banderaCat.setAttribute('visible', false);
+                    banderaUk.setAttribute('visible', false);
+                    esfera1.setAttribute('visible', true);
+                    esfera2.setAttribute('visible', true);
+                    esfera3.setAttribute('visible', true);
+                    esfera4.setAttribute('visible', true);
+                    esfera5.setAttribute('visible', true);
+                    esfera6.setAttribute('visible', true);
+                    esfera7.setAttribute('visible', true);
+                    esfera8.setAttribute('visible', true);
+                    esfera9.setAttribute('visible', true);
+                    mapa.setAttribute('visible', true);
+                    idioma = "cat"
+                    playAudio("Intro");  
+                })
+            }
+        });
 
-  // eventos banderas
-  banderaEs.addEventListener('click', () => onSelectLanguage('es'));
-  banderaCat.addEventListener('click', () => onSelectLanguage('ca'));
-  banderaUk.addEventListener('click', () => onSelectLanguage('uk'));
+        AFRAME.registerComponent("botocastella", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i00'); //Mostra la imatge 0  
+                    banderaEs.setAttribute('visible', false);
+                    banderaCat.setAttribute('visible', false);
+                    banderaUk.setAttribute('visible', false);
+                    esfera1.setAttribute('visible', true);
+                    esfera2.setAttribute('visible', true);
+                    esfera3.setAttribute('visible', true);
+                    esfera4.setAttribute('visible', true);
+                    esfera5.setAttribute('visible', true);
+                    esfera6.setAttribute('visible', true);
+                    esfera7.setAttribute('visible', true);
+                    esfera8.setAttribute('visible', true);
+                    esfera9.setAttribute('visible', true); 
+                    mapa.setAttribute('visible', true);
+                    idioma = "es"
+                    playAudio("Intro");  
+                })
+            }
+        });
 
-  // evento esfera general
-  hotGeneral.addEventListener('click', () => {
-    setScene('general');
-  });
+        AFRAME.registerComponent("botooficines", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i01'); //Mostra la imatge de la torre                
+                    if (sound.components.sound.isPlaying) {
+                        sound.components.sound.stopSound(); // Para el so si ja s'està reproduint
+                    }
+                    playAudio("torre");
+                })
+            }
+        });
+        AFRAME.registerComponent("botoabocador", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i02'); //Mostra la imatge de la torre                
+                    if (sound.components.sound.isPlaying) {
+                        sound.components.sound.stopSound(); // Para el so si ja s'està reproduint
+                    }
+                    playAudio("ermita");
+                })
+            }
+        });
+        AFRAME.registerComponent("bototransferencia", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i03'); //Mostra la imatge de la torre                
+                    if (sound.components.sound.isPlaying) {
+                        sound.components.sound.stopSound(); // Para el so si ja s'està reproduint
+                    }
+                    playAudio("transf");
+                })
+            }
+        });
+        AFRAME.registerComponent("botobiogas", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i04'); //Mostra la imatge de la torre                
+                    if (sound.components.sound.isPlaying) {
+                        sound.components.sound.stopSound(); // Para el so si ja s'està reproduint
+                    }
+                    playAudio("biogas");
+                })
+            }
+        });
+        AFRAME.registerComponent("botoaigua", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i05'); //Mostra la imatge de la torre                
+                    if (sound.components.sound.isPlaying) {
+                        sound.components.sound.stopSound(); // Para el so si ja s'està reproduint
+                    }
+                    playAudio("aigua");
+                })
+            }
+        });
+        AFRAME.registerComponent("botosolar", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i06'); //Mostra la imatge del mapa                
+                    if (sound.components.sound.isPlaying) {
+                        sound.components.sound.stopSound(); // Para el so si ja s'està reproduint
+                    }
+                    playAudio("solar");
+                })
+            }
+        });
+        AFRAME.registerComponent("botocompostatge", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i07'); //Mostra la imatge del mapa                
+                    if (sound.components.sound.isPlaying) {
+                        sound.components.sound.stopSound(); // Para el so si ja s'està reproduint
+                    }
+                    playAudio("compostatge");
+                })
+            }
+        });
+        AFRAME.registerComponent("botoplanta", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i08'); //Mostra la imatge del mapa                
+                    if (sound.components.sound.isPlaying) {
+                        sound.components.sound.stopSound(); // Para el so si ja s'està reproduint
+                    }
+                    playAudio("novaplanta");
+                })
+            }
+        });
+        AFRAME.registerComponent("botofalconeria", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#i09'); //Mostra la imatge del mapa                
+                    if (sound.components.sound.isPlaying) {
+                        sound.components.sound.stopSound(); // Para el so si ja s'està reproduint
+                    }
+                    playAudio("falconeria");
+                })
+            }
+        });
 
-  // desactivar movimiento WASD
-  const cam = document.querySelector('[camera]');
-  if (cam) cam.removeAttribute('wasd-controls');
-</script>
-
+    </script>
 </body>
+
 </html>
