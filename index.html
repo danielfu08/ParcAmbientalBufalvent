@@ -206,7 +206,10 @@
                     esfera8.setAttribute('visible', false);
                     esfera9.setAttribute('visible', false);
                     esfera0.setAttribute('visible', false); 
-                    mapa.setAttribute('visible', false);     
+                    mapa.setAttribute('visible', false);
+                    if (sound.components.sound.isPlaying) {
+                        sound.components.sound.stopSound();
+                    }    
                 })
             }
         });
