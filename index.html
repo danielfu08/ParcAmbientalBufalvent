@@ -71,6 +71,9 @@
 
         <a-sphere id="esfera9" botofalconeria="" position="0.180 -0.70 -2" radius="0.03" color="blue" visible="false"
             animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
+
+        <a-sphere id="esfera0" botointro="" position="0.900 -0.66 -2" radius="0.03" color="blue" visible="false"
+            animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere> 
          
 
         <!-- Element de so -->
@@ -94,6 +97,7 @@
         const esfera7 = document.querySelector('#esfera7');
         const esfera8 = document.querySelector('#esfera8');
         const esfera9 = document.querySelector('#esfera9');
+        const esfera0 = document.querySelector('esfera0');
         const mapa = document.querySelector('#plano');
 
         //elimina el moviment de les tecles del cursor
@@ -183,6 +187,28 @@
             }
         });
 
+        AFRAME.registerComponent("botointro", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#ipresentacio');
+                    banderaEs.setAttribute('visible', true);
+                    banderaCat.setAttribute('visible', true);
+                    banderaUk.setAttribute('visible', true);
+                    esfera1.setAttribute('visible', false);
+                    esfera2.setAttribute('visible', false);
+                    esfera3.setAttribute('visible', false);
+                    esfera4.setAttribute('visible', false);
+                    esfera5.setAttribute('visible', false);
+                    esfera6.setAttribute('visible', false);
+                    esfera7.setAttribute('visible', false);
+                    esfera8.setAttribute('visible', false);
+                    esfera9.setAttribute('visible', false);
+                    esfera0.setAttribute('visible', false); 
+                    mapa.setAttribute('visible', false);     
+                })
+            }
+        });
+        
         AFRAME.registerComponent("botooficines", {
             init: function () {
                 this.el.addEventListener("click", (e) => {
