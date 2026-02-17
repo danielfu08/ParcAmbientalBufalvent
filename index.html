@@ -71,6 +71,8 @@
 
         <a-sphere id="esfera9" botofalconeria="" position="0.180 -0.70 -2" radius="0.03" color="blue" visible="false"
             animation="property: scale; dur: 1000;  to: 1.2 1.2 1.2; dir: alternate;  loop: true"></a-sphere>
+
+        <a-plane id="esfera0" botointro position="0.900 -0.66 -2" src="assets/imatges/casa.png" visible="false" rotation="0 0 0" scale="0.15 0.15 0.15"></a-plane>
          
 
         <!-- Element de so -->
@@ -94,6 +96,7 @@
         const esfera7 = document.querySelector('#esfera7');
         const esfera8 = document.querySelector('#esfera8');
         const esfera9 = document.querySelector('#esfera9');
+        const esfera0 = document.querySelector('#esfera0');
         const mapa = document.querySelector('#plano');
 
         //elimina el moviment de les tecles del cursor
@@ -130,6 +133,7 @@
                     esfera7.setAttribute('visible', true);
                     esfera8.setAttribute('visible', true);
                     esfera9.setAttribute('visible', true);
+                    esfera0.setAttribute('visible', true);
                     mapa.setAttribute('visible', true);
                     idioma = "uk"
                     playAudio("intro");  
@@ -153,6 +157,7 @@
                     esfera7.setAttribute('visible', true);
                     esfera8.setAttribute('visible', true);
                     esfera9.setAttribute('visible', true);
+                    esfera0.setAttribute('visible', true);
                     mapa.setAttribute('visible', true);
                     idioma = "cat"
                     playAudio("intro");  
@@ -175,7 +180,8 @@
                     esfera6.setAttribute('visible', true);
                     esfera7.setAttribute('visible', true);
                     esfera8.setAttribute('visible', true);
-                    esfera9.setAttribute('visible', true); 
+                    esfera9.setAttribute('visible', true);
+                    esfera0.setAttribute('visible', true);
                     mapa.setAttribute('visible', true);
                     idioma = "es"
                     playAudio("intro");  
@@ -183,6 +189,31 @@
             }
         });
 
+        AFRAME.registerComponent("botointro", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    sky.setAttribute('src', '#ipresentacio');
+                    banderaEs.setAttribute('visible', true);
+                    banderaCat.setAttribute('visible', true);
+                    banderaUk.setAttribute('visible', true);
+                    esfera1.setAttribute('visible', false);
+                    esfera2.setAttribute('visible', false);
+                    esfera3.setAttribute('visible', false);
+                    esfera4.setAttribute('visible', false);
+                    esfera5.setAttribute('visible', false);
+                    esfera6.setAttribute('visible', false);
+                    esfera7.setAttribute('visible', false);
+                    esfera8.setAttribute('visible', false);
+                    esfera9.setAttribute('visible', false);
+                    esfera0.setAttribute('visible', false); 
+                    mapa.setAttribute('visible', false);
+                    if (sound.components.sound.isPlaying) {
+                        sound.components.sound.stopSound();
+                    }    
+                })
+            }
+        });
+        
         AFRAME.registerComponent("botooficines", {
             init: function () {
                 this.el.addEventListener("click", (e) => {
